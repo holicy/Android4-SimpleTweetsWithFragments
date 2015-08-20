@@ -17,6 +17,8 @@ uses-sdk
 ADDED from AndroidManifest.xml:7:5
 MERGED from com.android.support:appcompat-v7:21.0.0:15:5
 MERGED from com.android.support:support-v4:21.0.0:15:5
+MERGED from com.astuetz:pagerslidingtabstrip:1.0.1:2:5
+MERGED from com.android.support:support-v4:21.0.0:15:5
 	android:targetSdkVersion
 		ADDED from AndroidManifest.xml:9:9
 		INJECTED from AndroidManifest.xml:0:0
@@ -44,6 +46,8 @@ ADDED from AndroidManifest.xml:15:5
 application
 ADDED from AndroidManifest.xml:17:5
 MERGED from com.android.support:appcompat-v7:21.0.0:16:5
+MERGED from com.android.support:support-v4:21.0.0:16:5
+MERGED from com.astuetz:pagerslidingtabstrip:1.0.1:4:5
 MERGED from com.android.support:support-v4:21.0.0:16:5
 	android:label
 		ADDED from AndroidManifest.xml:21:9
@@ -114,9 +118,9 @@ ADDED from AndroidManifest.xml:50:9
 activity#com.codepath.apps.simpletweets.PostActivity
 ADDED from AndroidManifest.xml:54:9
 	android:label
-		ADDED from AndroidManifest.xml:57:13
-	android:parentActivityName
 		ADDED from AndroidManifest.xml:56:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:57:13
 	android:name
 		ADDED from AndroidManifest.xml:55:13
 meta-data#android.support.PARENT_ACTIVITY
@@ -125,3 +129,9 @@ ADDED from AndroidManifest.xml:58:13
 		ADDED from AndroidManifest.xml:60:17
 	android:name
 		ADDED from AndroidManifest.xml:59:17
+activity#com.codepath.apps.simpletweets.ProfileActivity
+ADDED from AndroidManifest.xml:62:9
+	android:label
+		ADDED from AndroidManifest.xml:64:13
+	android:name
+		ADDED from AndroidManifest.xml:63:13

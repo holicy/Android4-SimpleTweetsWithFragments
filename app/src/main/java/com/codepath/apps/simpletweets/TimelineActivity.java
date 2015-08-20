@@ -2,122 +2,88 @@ package com.codepath.apps.simpletweets;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
-import com.codepath.apps.simpletweets.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.simpletweets.fragments.HomeTimelineFragment;
+import com.codepath.apps.simpletweets.fragments.MentionsTimelineFragment;
 
 public class TimelineActivity extends ActionBarActivity {
-
-    private TwitterClient client;
-    private List<Tweet> tweets;
-    private TweetArrayAdapter tweets_adapter;
-    private ListView tweets_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_timeline);
 
-        tweets_view = (ListView) findViewById(R.id.lvTweets);
+        ViewPager view_pager = (ViewPager) findViewById(R.id.viewpager);
+        view_pager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
 
-        tweets = new ArrayList<>();
-
-        tweets_adapter = new TweetArrayAdapter(this, tweets);
-
-        tweets_view.setAdapter(tweets_adapter);
-        tweets_view.setOnScrollListener(new EndlessScrollListener() {
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-
-                Log.i("DEBUG", "count: " + tweets.size());
-                Log.i("DEBUG", "page: " + page);
-
-                if (tweets.size() < 25 * (page - 1)) {
-                    return;
-                }
-
-                client.getHomeTimelineSince(tweets.get(tweets.size() - 1).getUid(), new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess (int statusCode, Header[] headers, JSONArray response)
-                    {
-                        Log.d("DEBUG", response.toString());
-
-                        tweets_adapter.addAll(Tweet.fromJSONArray(response));
-                    }
-
-                    @Override
-                    public void onFailure (int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
-                    {
-                        Log.d("DEBUG", errorResponse.toString());
-                    }
-
-                });
-            }
-
-        });
-
-        client = TwitterApplication.getRestClient();
-        populateTimeline();
-    }
-
-    private void populateTimeline()
-    {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess (int statusCode, Header[] headers, JSONArray response)
-            {
-                Log.d("DEBUG", response.toString());
-
-                tweets_adapter.addAll(Tweet.fromJSONArray(response));
-            }
-
-            @Override
-            public void onFailure (int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse)
-            {
-                Log.d("DEBUG", errorResponse.toString());
-            }
-
-        });
+        PagerSlidingTabStrip tab_strip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tab_strip.setViewPager(view_pager);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+    public boolean onCreateOptionsMenu (Menu menu)
+    {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
 
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onPost (MenuItem item)
+    {
+        Intent i = new Intent(this, PostActivity.class);
+        startActivity(i);
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_post) {
-            Intent i = new Intent(TimelineActivity.this, PostActivity.class);
-            startActivity(i);
+    public void onProfileView (MenuItem item)
+    {
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
+    }
 
-            return true;
+    public class TweetsPagerAdapter extends FragmentPagerAdapter
+    {
+
+        private String[] items = { "Home", "Mentions" };
+
+        public TweetsPagerAdapter (FragmentManager fm)
+        {
+            super(fm);
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        public Fragment getItem (int position)
+        {
+            switch (position) {
+                case 0:
+                    return new HomeTimelineFragment();
+                case 1:
+                    return new MentionsTimelineFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount()
+        {
+            return items.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle (int position)
+        {
+            return items[position];
+        }
+
     }
+
 }

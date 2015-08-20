@@ -1,6 +1,7 @@
 package com.codepath.apps.simpletweets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>
     @Override
     public View getView (int position, View convertView, ViewGroup parent)
     {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
@@ -45,6 +46,17 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>
         ivProfileImage.setImageResource(android.R.color.transparent);
 
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+
+                i.putExtra("screen_name", tweet.getUser().getScreenName());
+
+                getContext().startActivity(i);
+            }
+        });
 
         return convertView;
     }

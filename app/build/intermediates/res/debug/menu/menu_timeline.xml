@@ -5,7 +5,13 @@
 
     <item android:id="@+id/action_post" android:title="POST"
         android:icon="@drawable/ic_action_post"
-        android:orderInCategory="100" app:showAsAction="always" />
+        android:orderInCategory="100" app:showAsAction="always"
+        android:onClick="onPost" />
+
+    <item android:id="@+id/action_profile" android:title="PROFILE"
+        android:icon="@drawable/ic_profile"
+        android:orderInCategory="100" app:showAsAction="always"
+        android:onClick="onProfileView" />
 
 </menu>
 <!-- From: file:/Users/jimho/Downloads/SimpleTweets/app/src/main/res/menu/menu_timeline.xml -->
